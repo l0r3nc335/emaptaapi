@@ -25,10 +25,13 @@ class AgileController extends Controller
     public function index(Request $request)
     {
         try{
-            $agile = Agile::get();
+
+            $search = $request->search ?? '';
+            $agile = Agile::where('description', 'LIKE', '%' . $search . '%')->orWhere('type', 'LIKE', '%' .  $search. '%')->get();
 
             $response = new StdClass();
             $response->headers = [
+                (object) ['text' => '#', 'align' => 'center', 'sortable' => false, 'value' => 'id'],
                 (object) ['text' => 'Description', 'align' => 'center', 'sortable' => false, 'value' => 'description'],
                 (object) ['text' => 'Type', 'align' => 'center', 'sortable' => false, 'value' => 'type'],
                 (object) ['text' => 'Actions', 'align' => 'center', 'sortable' => false, 'value' => 'actions'],
