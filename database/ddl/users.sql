@@ -1,7 +1,6 @@
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `user_type_id` int(11) DEFAULT NULL,
-  `teacher_id` varchar(100) DEFAULT NULL,
+  `project_id` int(11) NOT NULL DEFAULT 0,
   `name` varchar(100) DEFAULT NULL,
   `username` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,

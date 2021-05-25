@@ -3,6 +3,7 @@ CREATE TABLE `ticket_conversations` (
   `ticket_id` int(11) DEFAULT NULL,
   `message` text DEFAULT NULL,
   `is_send` tinyint(4) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL,
   `created_by` int(11) NOT NULL DEFAULT 0,
   `updated_by` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),

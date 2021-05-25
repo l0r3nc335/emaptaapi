@@ -5,4 +5,5 @@ Homestead.yaml
 .env
 composer.lock
 public/uploads/*
+public/downloads/*
 public/images/announcement/*

@@ -11,6 +11,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use App\Models\Ticket;
 
 class Ticket extends Model
 {
@@ -39,20 +40,12 @@ class Ticket extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        //'deleted_at',
-        //'created_at',
-        //'updated_at',
-    ];
+    protected $hidden = [];
     protected $dateFormat = 'Y-m-d';
 
     protected $dates = [
         'created_at',
         'updated_at',
-    ];
-    protected $casts = [
-        'created_at'  => 'datetime:Y-m-d H:00',
-        'updated_at' => 'datetime:Y-m-d H:00',
     ];
 
     const PER_PAGE = 15;
@@ -83,20 +76,20 @@ class Ticket extends Model
     {
         return $query->where('status', self::CLOSED);
     }
-    public function assignedUser()
+    public static function ticketReports($projectId,$year,$month)
     {
-        return $this->belongsTo(User::class, 'assigned_to');
-    }
-    public function createdUser()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-    public function updatedUser()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
-    }
-    public static function ticketReports($year,$month)
-    {
+        if($year == "" || isset($year) == false){
+            $where = "";
+        }else{
+            $where = " WHERE  
+                        ReportYear = " .$year. "
+                        AND 
+                        ReportMonth = " .$month . " ";
+        }
+        $projectparameter = "";
+        if($projectId>0){
+            $projectparameter = "`project_id` = ".$projectId. " AND";
+        }
         $query = "
                     SELECT 
                         TMP.ReportYear, 
@@ -106,15 +99,13 @@ class Ticket extends Model
                         SUM(TMP.Pending) AS Pending, 
                         SUM(TMP.Closed) AS Closed 
                     FROM (
-                        SELECT YEAR(`created_at`) AS ReportYear, MONTH(`created_at`) AS ReportMonth, count(`id`) as Unassigned, 0 AS Assigned, 0 AS Pending, 0 AS Closed FROM `tickets` WHERE `project_id` = 1 AND `status` = 0 GROUP BY YEAR(`created_at`) , MONTH(`created_at`) UNION ALL
-                        SELECT YEAR(`created_at`) AS ReportYear, MONTH(`created_at`) AS ReportMonth, 0 AS Unassigned, count(`id`) AS  Assigned, 0 AS Pending, 0 AS Closed FROM `tickets` WHERE `project_id` = 1 AND `status` = 1 GROUP BY YEAR(`created_at`) , MONTH(`created_at`) UNION ALL
-                        SELECT YEAR(`created_at`) AS ReportYear, MONTH(`created_at`) AS ReportMonth, 0 as Unassigned, 0 AS Assigned, count(`id`) as Pending, 0 AS Closed FROM `tickets` WHERE `project_id` = 1 AND `status` = 2 GROUP BY YEAR(`created_at`) , MONTH(`created_at`) UNION ALL
-                        SELECT YEAR(`created_at`) AS ReportYear, MONTH(`created_at`) AS ReportMonth, 0 as Unassigned, 0 AS Assigned, 0 AS Pending, count(`id`) AS Closed FROM `tickets` WHERE `project_id` = 1 AND `status` = 3 GROUP BY YEAR(`created_at`) , MONTH(`created_at`)
+                        SELECT YEAR(`created_at`) AS ReportYear, MONTH(`created_at`) AS ReportMonth, count(`id`) as Unassigned, 0 AS Assigned, 0 AS Pending, 0 AS Closed FROM `tickets` WHERE ". $projectparameter ." `status` = 0 GROUP BY YEAR(`created_at`) , MONTH(`created_at`) UNION ALL
+                        SELECT YEAR(`created_at`) AS ReportYear, MONTH(`created_at`) AS ReportMonth, 0 AS Unassigned, count(`id`) AS  Assigned, 0 AS Pending, 0 AS Closed FROM `tickets` WHERE ". $projectparameter ." `status` = 1 GROUP BY YEAR(`created_at`) , MONTH(`created_at`) UNION ALL
+                        SELECT YEAR(`created_at`) AS ReportYear, MONTH(`created_at`) AS ReportMonth, 0 as Unassigned, 0 AS Assigned, count(`id`) as Pending, 0 AS Closed FROM `tickets` WHERE ". $projectparameter ." `status` = 2 GROUP BY YEAR(`created_at`) , MONTH(`created_at`) UNION ALL
+                        SELECT YEAR(`created_at`) AS ReportYear, MONTH(`created_at`) AS ReportMonth, 0 as Unassigned, 0 AS Assigned, 0 AS Pending, count(`id`) AS Closed FROM `tickets` WHERE ". $projectparameter ." `status` = 3 GROUP BY YEAR(`created_at`) , MONTH(`created_at`)
                     ) 
                     TMP
-                    WHERE  
-                        ReportYear = ".$year." AND
-                        ReportMonth = ".$month."
+                     " . $where . "
                     GROUP BY 
                         ReportYear, 
                         ReportMonth 
@@ -122,37 +113,19 @@ class Ticket extends Model
                         ReportYear DESC,
                         ReportMonth DESC
                 ";
+        
+                
         $results = DB::select($query);
         return $results;
     }
 
     public static function ticketYearMonth()
-    {
-        $query = "
-                    SELECT
-                        MAX(YEAR(`created_at`)) AS year,
-                        MAX(MONTH(`created_at`)) AS month
-                    FROM
-                        `tickets`
-                ";
-
-        $results = DB::select($query);
-        return $results;
+    {   
+        return Ticket::get( DB::raw(" MAX(YEAR(`created_at`)) AS year,  MONTH(`created_at`) AS month") );
     }
+
     public static function ticketYears()
     {
-        $query = "
-                    SELECT
-                        YEAR(`created_at`) AS year
-                    FROM
-                        `tickets`
-                    WHERE
-                        1
-                    GROUP BY
-                        YEAR(`created_at`)
-                ";
-
-        $results = DB::select($query);
-        return $results;
+        return Ticket::groupBy(DB::raw("  YEAR(`created_at`) "))->get( DB::raw("  YEAR(`created_at`) AS year  ") );
     }
 }

@@ -19,6 +19,14 @@ $router->put('/reset-password', 'AuthController@reset');
 
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
+    
+    //emapta 
+    $router->get('/agile', 'AgileController@index');
+    $router->post('/agile', 'AgileController@store');
+    $router->delete('/agile/{id}', 'AgileController@destroy');
+    $router->put('/agile/{agile}', 'AgileController@update');
+
+
     $router->get('/declarations/download', 'DeclarationController@downloadExcel');
     $router->get('/declarations', 'DeclarationController@index');
     $router->put('/change-password', 'AuthController@changePassword');
@@ -41,10 +49,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/tickets/{ticket}', 'TicketController@show');
 
     $router->get('/projects-report', 'TicketController@projectsReport');
-    $router->get('/project-year-month', 'TicketController@projectsReportYearMonth');
-    $router->get('/projects-report/download', 'TicketController@ticketReportDownload');
-
-    
+    $router->get('/project-reports/parameters', 'TicketController@projectsReportYearMonth');
+    $router->get('/project-reports/download', 'TicketController@ticketReportDownload');
 
     /** SMS Blast Endpoints */
     $router->get('/sms-blasts', 'SmsBlastController@index');

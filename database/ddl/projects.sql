@@ -2,6 +2,7 @@ CREATE TABLE `projects` (
   `id` int(11) NOT NULL,
   `code` varchar(350) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `name` varchar(350) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `active` int(2) NOT NULL DEFAULT 1,
   `created_by` int(11) NOT NULL DEFAULT 0,
   `updated_by` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),

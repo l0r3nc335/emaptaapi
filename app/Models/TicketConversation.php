@@ -24,6 +24,7 @@ class TicketConversation extends Model
         'ticket_id',
         'message',
         'is_sent',
+        'user_id',
         'created_by',
         'updated_by',
         'created_at',
@@ -63,6 +64,6 @@ class TicketConversation extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

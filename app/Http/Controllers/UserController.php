@@ -106,7 +106,7 @@ class UserController extends Controller
     {
         try {
             $user->delete();
-            $this->setMessage('Project <b>' . $user->name . '</b> deleted.');
+            $this->setMessage('User <b>' . $user->name . '</b> deleted.');
             return $this->sendResponse($user);
         } catch (\Exception $exception) {
             $this->setStatus(500);
