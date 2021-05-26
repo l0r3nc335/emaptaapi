@@ -26,39 +26,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->delete('/agile/{id}', 'AgileController@destroy');
     $router->put('/agile/{agile}', 'AgileController@update');
 
-
-    $router->get('/declarations/download', 'DeclarationController@downloadExcel');
-    $router->get('/declarations', 'DeclarationController@index');
-    $router->put('/change-password', 'AuthController@changePassword');
-    $router->post('/logout', 'AuthController@logout');
-
-    $router->get('/autofill', 'AutofillController@show');
-    $router->put('/autofill', 'AutofillController@update');
-
-    /** Project Management Endpoints */
-    $router->get('/projects', 'ProjectController@index');
-    $router->get('/active-projects', 'ProjectController@activeProjects');
-    $router->post('/projects', 'ProjectController@store');
-    $router->get('/projects/{project}', 'ProjectController@show');
-    $router->put('/projects/{project}', 'ProjectController@update');
-    $router->delete('/projects/{project}', 'ProjectController@destroy');
-
-    /** Ticket Management Endpoints */
-    $router->get('/tickets', 'TicketController@index');
-    $router->put('/tickets/{ticket}', 'TicketController@update');
-    $router->get('/tickets/{ticket}', 'TicketController@show');
-
-    $router->get('/projects-report', 'TicketController@projectsReport');
-    $router->get('/project-reports/parameters', 'TicketController@projectsReportYearMonth');
-    $router->get('/project-reports/download', 'TicketController@ticketReportDownload');
-
-    /** SMS Blast Endpoints */
-    $router->get('/sms-blasts', 'SmsBlastController@index');
-    $router->post('/sms-blasts', 'SmsBlastController@store');
-    $router->get('/sms-blasts/{smsBlast}', 'SmsBlastController@show');
-    $router->put('/sms-blasts/{smsBlast}', 'SmsBlastController@update');
-    $router->delete('/sms-blasts/{smsBlast}', 'SmsBlastController@destroy');
-
     /** Users Management Endpoints */ 
     $router->get('/users', 'UserController@index');
     $router->post('/users', 'UserController@store');

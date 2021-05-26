@@ -1,9 +1,8 @@
 <?php
 
 /**
- * Ticket Model
- * Created by : Jovic
- * 2021-04-19
+ * Created By Lorenzo Garcia
+ * 2021-04-16
  */
 
 namespace App\Models;

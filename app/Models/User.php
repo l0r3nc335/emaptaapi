@@ -1,9 +1,8 @@
 <?php
 
 /**
- * User Model
- * Created by : Karl Pandacan
- * 2020-07-30
+ * Created By Lorenzo Garcia
+ * 2021-04-16
  */
 
 namespace App\Models;
@@ -21,7 +20,6 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'project_id',
         'name',
         'username',
         'email',
@@ -57,7 +55,4 @@ class User extends Model
             ->where('password', md5($password));
     }
 
-    public function project(){
-        return $this->hasOne(Project::class, 'id', 'project_id');
-    }
 }

@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         try {
             $search = $request->search ?? '';
-            $users = User::with('project')->where('name', 'LIKE', '%' . $search . '%') ->orWhere('email', 'LIKE', '%' . $search . '%')->orderBy('id', 'asc')->paginate(User::PER_PAGE);
+            $users = User::where('name', 'LIKE', '%' . $search . '%') ->orWhere('email', 'LIKE', '%' . $search . '%')->orderBy('id', 'asc')->paginate(User::PER_PAGE);
 
             $response = new StdClass();
 

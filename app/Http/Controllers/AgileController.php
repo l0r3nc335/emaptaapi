@@ -1,9 +1,8 @@
 <?php
 
 /**
- * Declaration AgileController
- * Created by : Lorenzo Garcia
- * 2021-05-25
+ * Created By Lorenzo Garcia
+ * 2021-04-16
  */
 
 namespace App\Http\Controllers;
@@ -78,7 +77,7 @@ class AgileController extends Controller
     public function destroy(Request $request, Agile $agile)
     {
         try {
-            $agile = Agile::where('id', 4)->first();
+            $agile = Agile::where('id', $request->id)->first();
             $agile->delete();
             
             $this->setMessage('Description <b>' . $agile->description . '</b> deleted.');
@@ -98,7 +97,7 @@ class AgileController extends Controller
             $agile->type = $request->type;
             $agile->save();
 
-            $this->setMessage('Success Updating Project ' . $agile->description);
+            $this->setMessage('Success Updating ' . $agile->description);
             return $this->sendResponse($agile);
         } catch (\Exception $exception) {
             $this->setStatus(500);
